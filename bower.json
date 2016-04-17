@@ -1,0 +1,7 @@
+{
+  "name": "Inoplate media manager",
+  "dependencies": {
+    "flow.js": "~2",
+    "holderjs": "~2.9.3"
+  }
+}

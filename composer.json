@@ -1,0 +1,17 @@
+{
+    "name": "inoplate/media",
+    "autoload": {
+        "psr-4": {
+            "Inoplate\\Media\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "require-dev": {
+        "phpspec/phpspec": "~2.0"
+    },
+    "require": {
+        "flowjs/flow-php-server": "^1.0"
+    }
+}

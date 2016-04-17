@@ -1,0 +1,31 @@
+@import "variables.less";
+
+.uploader {
+    position: relative;
+
+    .uploader-dropzone {
+        height: 100%;
+        border: 4px dashed @light-gray;
+    }
+
+    .uploader-dropzone.hover {
+        border-color: @light-blue;
+    }
+
+    .drag-drop-inside {
+        margin: 70px auto 0;
+
+        p {
+            text-align: center;
+        }
+
+        p.info {
+            font-size: 20px;
+            color: @blue;
+        }
+    }
+
+    .uploader-dropzone {
+        margin-bottom: 20px;
+    }
+}

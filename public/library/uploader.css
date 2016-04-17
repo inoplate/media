@@ -1,0 +1,25 @@
+.uploader {
+  position: relative;
+}
+.uploader .uploader-dropzone {
+  height: 100%;
+  border: 4px dashed #ecf0f5;
+}
+.uploader .uploader-dropzone.hover {
+  border-color: #5bc0de;
+}
+.uploader .drag-drop-inside {
+  margin: 70px auto 0;
+}
+.uploader .drag-drop-inside p {
+  text-align: center;
+}
+.uploader .drag-drop-inside p.info {
+  font-size: 20px;
+  color: #337ab7;
+}
+.uploader .uploader-dropzone {
+  margin-bottom: 20px;
+}
+
+/*# sourceMappingURL=uploader.css.map */

@@ -1,0 +1,30 @@
+@import "variables.less";
+
+#library-wrapper {
+    min-height: 200px;
+}
+
+.uploader-dismiss {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 20px;
+    color: @gray;
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.file-pager {
+    position: relative;
+    min-height: 50px;
+    text-align: center;
+
+    a {
+        width: 100%;
+    }
+
+    .end-info {
+        display: none;
+    }
+}

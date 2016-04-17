@@ -1,0 +1,4 @@
+suites:
+  library_suite:
+    namespace: Inoplate\Media
+    psr4_prefix: Inoplate\Media

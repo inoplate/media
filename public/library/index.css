@@ -1,0 +1,26 @@
+#library-wrapper {
+  min-height: 200px;
+}
+.uploader-dismiss {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 20px;
+  color: #d2d6de;
+}
+.uploader-dismiss:hover {
+  cursor: pointer;
+}
+.file-pager {
+  position: relative;
+  min-height: 50px;
+  text-align: center;
+}
+.file-pager a {
+  width: 100%;
+}
+.file-pager .end-info {
+  display: none;
+}
+
+/*# sourceMappingURL=index.css.map */
