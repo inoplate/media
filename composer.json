@@ -1,5 +1,9 @@
 {
     "name": "inoplate/media",
+    "description": "Inoplate media manager",
+    "keywords": ["laravel", "inoplate", "media-manager"],
+    "type": "composer",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Inoplate\\Media\\": "src/"
@@ -13,5 +17,8 @@
     },
     "require": {
         "flowjs/flow-php-server": "^1.0"
+    },
+    "config": {
+        "preferred-install": "dist"
     }
 }
