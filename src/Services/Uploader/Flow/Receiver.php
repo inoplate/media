@@ -8,6 +8,8 @@ use Inoplate\Media\Services\Uploader\Receiver as Contract;
 use Inoplate\Media\Services\Uploader\BaseReceiver;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Inoplate\Media\Exceptions\MaximumUploadSizeExceededException;
+
 
 class Receiver extends BaseReceiver implements Contract
 {
@@ -24,7 +26,7 @@ class Receiver extends BaseReceiver implements Contract
     /**
      * @var string
      */
-    protected $chunkTempPath;
+    protected $chunkTempPath = 'chunks';
 
     /**
      * @var int
@@ -291,7 +293,9 @@ class Receiver extends BaseReceiver implements Contract
      */
     protected function setup(array $config = [])
     {
-        $this->chunkTempPath = isset($config['chunks_temp_path']) ?: 'chunks';
+        if(isset($config['chunks_temp_path'])) {
+            $this->chunkTempPath = $config['chunks_temp_path'];
+        }
 
         if(isset($config['maximum_upload_size'])) {
             $this->setMaximumUploadSize($config['maximum_upload_size']);
@@ -315,5 +319,33 @@ class Receiver extends BaseReceiver implements Contract
     protected function getBasePath()
     {
         return $this->filesystem->getDriver()->getAdapter()->getPathPrefix();
+    }
+
+    /**
+     * Validating file size
+     * @return void
+     */
+    protected function validateFileSize()
+    {
+        $nextFileSize = $this->getFile($this->request)->getClientSize();
+        $maxUploadSize = $this->getMaximumUploadSize();
+        $totalChunks = $this->request->input('flowTotalChunks');
+        $size = $nextFileSize;
+        $uploaded = [];
+        $meta = [
+            'extension' => 'unknown',
+        ];
+
+        for ($i = 1; $i <= $totalChunks; $i++) {
+            $chunk = $this->getChunkPath($i);
+            if ($this->checkChunk($i)) {
+                $size += $this->filesystem->size($chunk);
+                $uploaded[] = $chunk;
+            }
+
+            if($size > $maxUploadSize) {
+                throw new MaximumUploadSizeExceededException($uploaded, $meta, "File upload must not exceed ".format_size_units($maxUploadSize));
+            }
+        }
     }
 }

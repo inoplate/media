@@ -5,10 +5,9 @@ namespace Inoplate\Media\Infrastructure\Repositories;
 use Ramsey\Uuid\Uuid;
 use Inoplate\Media\MediaLibrary as Model;
 use Inoplate\Media\Domain\Repositories\Library as Contract;
+use Inoplate\Media\Domain\Repositories\Author as AuthorRepository;
 use Inoplate\Media\Domain\Models as MediaDomainModels;
-use Inoplate\Account\Domain\Repositories\User as UserRepository;
 use Inoplate\Foundation\Domain\Models as FoundationDomainModels;
-use Inoplate\Account\Domain\Models as AccountDomainModels;
 use Roseffendi\Authis\Authis;
 use Illuminate\Contracts\Auth\Guard;
 
@@ -20,9 +19,9 @@ class EloquentLibrary implements Contract
     protected $model;
 
     /**
-     * @var Inoplate\Account\Domain\Repositories\User
+     * @var Inoplate\Media\Domain\Repositories\Author
      */
-    protected $userRepository;
+    protected $authorRepository;
 
     /**
      * @var Roseffendi\Authis\Authis
@@ -37,19 +36,19 @@ class EloquentLibrary implements Contract
     /**
      * Create new EloquentLibrary instance
      * 
-     * @param Model          $model
-     * @param UserRepository $userRepository
-     * @param Authis         $authis
-     * @param Guard          $auth
+     * @param Model             $model
+     * @param AuthorRepository  $authorRepository
+     * @param Authis            $authis
+     * @param Guard             $auth
      */
     public function __construct(
         Model $model, 
-        UserRepository $userRepository, 
+        AuthorRepository $authorRepository, 
         Authis $authis,
         Guard $auth
     ) {
         $this->model = $model;
-        $this->userRepository = $userRepository;
+        $this->authorRepository = $authorRepository;
         $this->authis = $authis;
         $this->auth = $auth;
     }
@@ -57,7 +56,7 @@ class EloquentLibrary implements Contract
     /**
      * Retrieve user generated identity
      * 
-     * @return Inoplate\Account\Domain\Models\UserId
+     * @return Inoplate\Media\Domain\Models\LibraryId
      */
     public function nextIdentity()
     {
@@ -74,7 +73,7 @@ class EloquentLibrary implements Contract
      */
     public function findById(MediaDomainModels\LibraryId $libraryId)
     {
-        $library = $this->model->find($id->value());
+        $library = $this->model->find($libraryId->value());
 
         return $this->toDomainModel($library);
     }
@@ -95,10 +94,10 @@ class EloquentLibrary implements Contract
     /**
      * Retrieve library by owner
      * 
-     * @param  UserId $userId
+     * @param  AuthorId $authorId
      * @return array
      */
-    public function findByOwner(AccountDomainModels\UserId $userId)
+    public function findByOwner(MediaDomainModels\AuthorId $authorId)
     {
         $eloquentLibraries = $this->model->where('user_id', $userId->value())->get();
 
@@ -114,13 +113,13 @@ class EloquentLibrary implements Contract
     /**
      * Retreive library shared to user
      * 
-     * @param  UserId $userId
+     * @param  AuthorId $authorId
      * @return array
      */
-    public function sharedToUser(AccountDomainModels\UserId $userId)
+    public function sharedToAuthor(MediaDomainModels\AuthorId $authorId)
     {
-        $eloquentLibraries = $this->model->whereHas('users', function($query) use ($userId) {
-            $query->where('user_id', $userId->value());
+        $eloquentLibraries = $this->model->whereHas('users', function($query) use ($authorId) {
+            $query->where('user_id', $authorId->value());
         })->get();
 
         $libraries = [];
@@ -150,21 +149,34 @@ class EloquentLibrary implements Contract
      * @param  string  $search
      * @return array
      */
-    public function get($page, $search = '')
+    public function get($page, $search = '', $visibility = null, $ownership = null)
     {
         $this->model = $this->setupQuery($this->model);
 
+        $userId = $this->auth->user()->id;
         $perPage = config('inoplate.media.library.per_page', 10);
 
         if($search) {
             $this->model = $this->model->where(function($query) use ($search){
-                $query->where('title', 'like', "%search%")
-                      ->orWhere('name', 'like', "%search%");
+                $query->where('title', 'like', "%$search%")
+                      ->orWhere('name', 'like', "%$search%");
             });
         }
 
-        $eloquentLibraries = $this->model->skip(($page-1) * $perPage)->take($perPage)->get();
+        if($ownership == 1) {
+            $this->model = $this->model->where('user_id', $userId);
+        }elseif($ownership == 2) {
+            $this->model = $this->model->where('user_id', '!=', $userId)
+                                       ->whereHas('users', function($query) use ($userId){
+                                            $query->where('user_id', $userId);
+                                        });
+        }
 
+        if($visibility) {
+            $this->model = $this->model->where('visibility', $visibility);
+        }
+
+        $eloquentLibraries = $this->model->skip(($page-1) * $perPage)->take($perPage)->orderBy('created_at', 'desc')->get();
         $libraries = [];
 
         foreach ($eloquentLibraries as $library) {
@@ -187,9 +199,9 @@ class EloquentLibrary implements Contract
         $library->user_id = $entity->owner()->id()->value();
 
         $description = $entity->description()->value();
-        $domainUsers = $entity->sharedTo();
+        $domainAuthors = $entity->sharedTo();
 
-        $users = [];
+        $authors = [];
 
         foreach ($description as $key => $value) {
             $library->{$key} = $value;
@@ -197,11 +209,25 @@ class EloquentLibrary implements Contract
         
         $library->save();
         
-        foreach ($domainUsers as $user) {
-            $users[] = $user->id()->value();
+        foreach ($domainAuthors as $author) {
+            $authors[] = $author->id()->value();
         }
 
-        $library->users()->sync($users);
+        $library->users()->sync($authors);
+    }
+
+    /**
+     * Remove library
+     * 
+     * @param  Library $entity
+     * @return void
+     */
+    public function remove(MediaDomainModels\Library $entity)
+    {
+        $library = $this->model->find($entity->id()->value());
+        $library->users()->detach();
+
+        $library->delete();
     }
 
     /**
@@ -212,14 +238,15 @@ class EloquentLibrary implements Contract
      */
     protected function setupQuery($model)
     {
-        if($this->authis->check('media.admin.library.view.all')) {
+        $userId = $this->auth->user()->id;
+        if($this->authis->check('media.admin.libraries.view.all')) {
             return $model;
         }else {
-            return $model->where(function($query) {
-                $query->where('user_id', $this->auth->user()->id)
-                      ->orWhere(function($query){
-                        $query->whereHas('users', function($query){
-                            $query->where('user_id', $this->auth->user()->id);
+            return $model->where(function($query) use ($userId){
+                $query->where('user_id', $userId)
+                      ->orWhere(function($query) use ($userId){
+                        $query->whereHas('users', function($query) use ($userId){
+                            $query->where('user_id', $userId);
                         });
                       })
                       ->orWhere('visibility', 'public');
@@ -239,14 +266,14 @@ class EloquentLibrary implements Contract
             return $library;
         }else {
             $id = new MediaDomainModels\LibraryId($library->id);
-            $owner = $this->userRepository->findById( new AccountDomainModels\UserId($library->user_id));
+            $owner = $this->authorRepository->findById( new MediaDomainModels\AuthorId($library->user_id));
             $description = new FoundationDomainModels\Description(array_except( $library->toArray(), ['id', 'user', 'users'] ));
 
             $plainUsers = $library->users;
             $sharedTo = [];
 
             foreach ($plainUsers as $user) {
-                $sharedTo[] = $this->userRepository->findById( new AccountDomainModels\UserId($user->id));
+                $sharedTo[] = $this->authorRepository->findById( new MediaDomainModels\AuthorId($user->id));
             }
 
             return new MediaDomainModels\Library($id, $owner, $sharedTo, $description);

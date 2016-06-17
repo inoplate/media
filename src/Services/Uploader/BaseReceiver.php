@@ -8,6 +8,7 @@ use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Inoplate\Media\Exceptions\UnallowedFileExtensionException;
 
 abstract class BaseReceiver
 {
@@ -170,32 +171,12 @@ abstract class BaseReceiver
 
         $extensionGuesser = ExtensionGuesser::getInstance();
         $extension = $extensionGuesser->guess($mime);
+        $meta = [
+            'extension' => $extension,
+        ];
 
         if( !in_array($extension, $extensions)) {
-            throw new UnallowedFileExtension("Uploading [.$extension] extension is prohibited");
-        }
-    }
-
-    /**
-     * Validating file size
-     * @return void
-     */
-    protected function validateFileSize()
-    {
-        $nextFileSize = $this->getFile($this->request)->getClientSize();
-        $maxUploadSize = $this->getMaximumUploadSize();
-        $totalChunks = $this->request->input('flowTotalChunks');
-        $size = $nextFileSize;
-
-        for ($i = 1; $i <= $totalChunks; $i++) {
-            $chunk = $this->getChunkPath($i);
-            if ($this->checkChunk($i)) {
-                $size += $this->filesystem->size($chunk);
-            }
-
-            if($size > $maxUploadSize) {
-                throw new MaximumUploadSizeExceeded("File upload must not exceed ".format_size_units($maxUploadSize));
-            }
+            throw new UnallowedFileExtensionException([$path], $meta, "Uploading [.$extension] file is prohibited");
         }
     }
 }

@@ -5,7 +5,6 @@ namespace Inoplate\Media\Domain\Models;
 use Inoplate\Foundation\Domain\Models as FoundationModels;
 use Inoplate\Foundation\Domain\Contracts\Describeable;
 use Inoplate\Media\Domain\Events;
-use Inoplate\Account\Domain\Models\User;
 
 class Library extends FoundationModels\Entity implements Describeable
 {
@@ -17,7 +16,7 @@ class Library extends FoundationModels\Entity implements Describeable
     protected $sharedTo;
 
     /**
-     * @var User
+     * @var Author
      */
     protected $owner;
 
@@ -25,13 +24,13 @@ class Library extends FoundationModels\Entity implements Describeable
      * Create new Role instance
      * 
      * @param LibraryId                         $id
-     * @param User                              $owner
+     * @param Author                            $owner
      * @param array                             $sharedTo
      * @param FoundationModels\Description      $description
      */
     public function __construct(
         LibraryId $id,
-        User $owner,
+        Author $owner,
         $sharedTo = [],
         FoundationModels\Description $description
     ) {
@@ -44,7 +43,7 @@ class Library extends FoundationModels\Entity implements Describeable
     /**
      * Retrieve library owner
      * 
-     * @return User
+     * @return Author
      */
     public function owner()
     {
@@ -62,32 +61,34 @@ class Library extends FoundationModels\Entity implements Describeable
     }
 
     /**
-     * Share library to user
+     * Share library to author
      * 
-     * @param  User   $user
+     * @param  Author   $author
      * @return void
      */
-    public function share(User $user)
+    public function share(Author $author)
     {
-        if(!in_array($user, $this->sharedTo)) {
-            $this->sharedTo[] = $user;
+        if(!in_array($author, $this->sharedTo)) {
+            $this->sharedTo[] = $author;
+            $this->recordEvent(new Events\LibraryWasSharedToAuthor($this, $author));
         }
-
-        $this->recordEvent(new Events\LibraryWasSharedToUser($this, $user));
     }
 
     /**
-     * Unshare library form user
+     * Unshare library form author
      * 
-     * @param  User   $user
+     * @param  Author   $author
      * @return void
      */
-    public function unshare(User $user)
+    public function unshare(Author $author)
     {
-        $this->sharedTo = array_values(array_filter($this->sharedTo, function($search) use ($user){
-            return !$search->equal($user);
+        $current = $this->sharedTo;
+        $this->sharedTo = array_values(array_filter($this->sharedTo, function($search) use ($author){
+            return !$search->equal($author);
         }));
 
-        $this->recordEvent(new Events\LibraryWasUnsharedFromUser($this, $user));
+        if($current != $this->sharedTo) {
+            $this->recordEvent(new Events\LibraryWasUnsharedFromAuthor($this, $author));
+        }        
     }
 }

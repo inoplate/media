@@ -1,0 +1,18 @@
+.box-body {
+  padding-bottom: 0;
+}
+.media-display {
+  display: table;
+  width: 100%;
+  background-color: #fff;
+  height: 450px;
+  position: relative;
+}
+.media-display .media-tile,
+.media-display .media-detail {
+  display: table-cell;
+  vertical-align: top;
+  background: #fff;
+}
+
+/*# sourceMappingURL=all-in-one.css.map */

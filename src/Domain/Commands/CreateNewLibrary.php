@@ -7,7 +7,7 @@ class CreateNewLibrary extends Command
     /**
      * @var string
      */
-    protected $userId;
+    protected $authorId;
 
     /**
      * @var array
@@ -17,12 +17,12 @@ class CreateNewLibrary extends Command
     /**
      * Create new CreateNewLibrary instance
      * 
-     * @param string $userId
+     * @param string $authorId
      * @param array  $description
      */
-    public function __construct($userId, $description = [])
+    public function __construct($authorId, $description = [])
     {
-        $this->userId = $userId;
+        $this->authorId = $authorId;
         $this->description = $description;
     }
 }

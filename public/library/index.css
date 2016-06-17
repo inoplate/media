@@ -1,26 +1,18 @@
-#library-wrapper {
-  min-height: 200px;
+.box-body {
+  padding-bottom: 0;
 }
-.uploader-dismiss {
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  font-size: 20px;
-  color: #d2d6de;
-}
-.uploader-dismiss:hover {
-  cursor: pointer;
-}
-.file-pager {
-  position: relative;
-  min-height: 50px;
-  text-align: center;
-}
-.file-pager a {
+.media-display {
+  display: table;
   width: 100%;
+  background-color: #fff;
+  height: 450px;
+  position: relative;
 }
-.file-pager .end-info {
-  display: none;
+.media-display .media-tile,
+.media-display .media-detail {
+  display: table-cell;
+  vertical-align: top;
+  background: #fff;
 }
 
 /*# sourceMappingURL=index.css.map */

@@ -2,7 +2,7 @@
 
 use Inoplate\Foundation\Domain\Command;
 
-class UnshareLibraryFromUser extends Command
+class ShareLibraryToAuthor extends Command
 {
     /**
      * @var string
@@ -12,17 +12,17 @@ class UnshareLibraryFromUser extends Command
     /**
      * @var string
      */
-    protected $userId;
+    protected $authorId;
 
     /**
-     * Create new UnshareLibraryFromUser instance
+     * Create new ShareLibraryToAuthor instance
      * 
      * @param string $libraryId
-     * @param string $userId
+     * @param string $authorId
      */
-    public function __construct($libraryId, $userId)
+    public function __construct($libraryId, $authorId)
     {
         $this->libraryId = $libraryId;
-        $this->userId = $userId;
+        $this->authorId = $authorId;
     }
 }

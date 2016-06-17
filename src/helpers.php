@@ -42,6 +42,31 @@ if (! function_exists('is_audio')) {
 
 }
 
+if( !function_exists('get_thumbnail')) {
+
+    /**
+     * Retrieve image thumbnail
+     * 
+     * @param  string $mime
+     * @return string
+     */
+    function get_thumbnail($mime, $forImage)
+    {
+        if(is_image($mime))
+            return $forImage;
+        elseif(is_video($mime))
+            return "/vendor/inoplate-media/images/medias/video_128px.png";
+        elseif(is_audio($mime))
+            return "/vendor/inoplate-media/images/medias/music_128px.png";
+        elseif(($mime == 'application/excel')||($mime == 'application/vnd.ms-excel')||($mime == 'application/x-excel')||($mime == 'application/x-msexcel'))
+            return "/vendor/inoplate-media/images/medias/xls_128px.png";
+        elseif(($mime == 'application/mspowerpoint')||($mime == 'application/powerpoint')||($mime == 'application/vnd.ms-powerpoint')||($mime == 'application/x-mspowerpoint'))
+            return "/vendor/inoplate-media/images/medias/xls_128px.png";
+        else
+            return "/vendor/inoplate-media/images/medias/file_128px.png";
+    }
+}
+
 if(! function_exists('format_size_units')) {
 
     /**

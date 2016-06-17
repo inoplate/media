@@ -1,0 +1,12 @@
+.library-finder {
+  padding: 0;
+}
+.library-finder .modal-header .close {
+  margin-top: -10px;
+}
+.library-finder .modal-body {
+  padding-bottom: 0;
+  padding-top: 10px;
+}
+
+/*# sourceMappingURL=finder.css.map */

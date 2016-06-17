@@ -2,8 +2,9 @@
 
 namespace Inoplate\Media\Domain\Repositories;
 
-use Inoplate\Account\Domain\Models\UserId;
+use Inoplate\Media\Domain\Models\Library as Model;
 use Inoplate\Media\Domain\Models\LibraryId;
+use Inoplate\Media\Domain\Models\AuthorId;
 
 interface Library
 {
@@ -26,16 +27,32 @@ interface Library
     /**
      * Retrieve library by owner
      * 
-     * @param  UserId $userId
+     * @param  AuthorId $authorId
      * @return array
      */
-    public function findByOwner(UserId $userId);
+    public function findByOwner(AuthorId $authorId);
 
     /**
-     * Retreive library shared to user
+     * Retreive library shared to author
      * 
-     * @param  UserId $userId
+     * @param  AuthorId $authorId
      * @return array
      */
-    public function sharedToUser(UserId $userId);
+    public function sharedToAuthor(AuthorId $authorId);
+
+    /**
+     * Save library
+     * 
+     * @param  Library $entity
+     * @return void
+     */
+    public function save(Model $entity);
+
+    /**
+     * Remove library
+     * 
+     * @param  Library $entity
+     * @return void
+     */
+    public function remove(Model $entity);
 }

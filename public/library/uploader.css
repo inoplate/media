@@ -1,6 +1,16 @@
 .uploader {
   position: relative;
 }
+.uploader .uploader-dismiss {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 20px;
+  color: #d2d6de;
+}
+.uploader .uploader-dismiss:hover {
+  cursor: pointer;
+}
 .uploader .uploader-dropzone {
   height: 100%;
   border: 4px dashed #ecf0f5;

@@ -1,0 +1,150 @@
+@import "variables.less";
+
+.media-tile {
+    padding: 10px;
+    border-top: 1px solid @gray;
+
+    .end-info {
+        position: relative;
+        text-align: center;
+        width: 100%;
+    }
+
+    .media-container {
+        .overlay {
+            position: absolute;
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        ul.thumbnail-wrapper {
+            list-style: none;
+            padding-left: 0;
+            font-size: 0;
+
+            li {
+                width: 150px;
+                margin: 0 20px 20px 0;
+                display: inline-block;
+                font-size: 14px;
+
+                .thumbnail {
+                    position: relative;
+                    border-radius: 0;
+                    border: none;
+                    padding: 0;
+                    margin-bottom: 0;
+
+                    .btn-action-wrapper {
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+
+                        .btn-action {
+                            vertical-align: middle;
+                            text-align: center;
+                            height: 150px;
+                            width: 150px;
+                            display: none;
+                        }
+                    }
+
+                    .img-placeholder {
+                        position: relative;
+                        width: 150px;
+                        height: 150px;
+                        border: 1px solid @light-gray;
+                        border-radius: 4px;
+                        background: @light-gray url('../images/loader.gif') center no-repeat;
+
+                        img {
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            margin: auto;
+                            max-width: 99.99%;
+                            border-radius: 4px;
+                            background-color: @light-gray;
+                        }
+                    }
+
+                    .caption {
+                        padding-left: 0;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 100%;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            li:not(.next-libraries-loader) {
+                .thumbnail {
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            li:not(.next-libraries-loader):not(.error) {
+                .thumbnail {
+                    &:hover {
+                        .img-placeholder {
+                            border: 1px solid @light-blue;
+                        }
+
+                        .caption {
+                            color: @light-blue;
+                        }
+
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            li.error, li.error.selected {
+                .thumbnail { 
+                    .img-placeholder {
+                        border: 1px solid @red;
+                    }
+
+                    .caption {
+                        color: @red;
+                    }
+                }
+            }
+
+            li.uploading, li.error{
+                .thumbnail {
+                    &:hover {
+                        .btn-action-wrapper {
+                            .btn-action {
+                                display: table-cell;
+                            }
+                        }
+                    }
+                }
+            }
+
+            li.selected {
+                .thumbnail { 
+                    .img-placeholder {
+                        border: 1px solid @light-blue;
+                    }
+
+                    .caption {
+                        color: @light-blue;
+                    }
+                }
+            }
+        }
+    }
+}

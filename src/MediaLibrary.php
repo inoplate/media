@@ -1,8 +1,10 @@
 <?php namespace Inoplate\Media;
 
+use Roseffendi\Authis\Resource;
+use Roseffendi\Authis\User;
 use Illuminate\Database\Eloquent\Model;
 
-class MediaLibrary extends Model
+class MediaLibrary extends Model implements Resource
 {
     /**
      * The database table used by the model.
@@ -42,6 +44,17 @@ class MediaLibrary extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('Inoplate\Account\User', 'media_libraries_shares', 'user_id', 'media_id');
+        return $this->belongsToMany('Inoplate\Account\User', 'media_libraries_shares', 'media_id', 'user_id');
+    }
+
+    /**
+     * Determine if resource belongs to user
+     * 
+     * @param  User    $user
+     * @return boolean       [description]
+     */
+    public function isBelongsTo(User $user)
+    {
+        return $user->id() === $this->user_id;
     }
 }

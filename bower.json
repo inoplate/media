@@ -2,6 +2,10 @@
   "name": "Inoplate media manager",
   "dependencies": {
     "flow.js": "~2",
-    "holderjs": "~2.9.3"
+    "holderjs": "~2.9.3",
+    "jquery_lazyload": "jquery.lazyload#~1.9.7",
+    "mediaelement": "~2.20.1",
+    "fancybox": "~2.1.5",
+    "jquery-load-template": "~1.5.7"
   }
 }

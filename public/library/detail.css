@@ -1,0 +1,79 @@
+.media-detail {
+  border-top: 1px solid #d2d6de;
+  border-left: 1px solid #d2d6de;
+  width: 300px;
+}
+.media-detail .media-error {
+  padding: 10px;
+}
+.media-detail .media-error ul {
+  list-style: none;
+  padding: 0;
+}
+.media-detail .media-preview-container,
+.media-detail .nothing-selected {
+  width: 100%;
+  color: #d2d6de;
+}
+.media-detail .media-preview-container .selection-exist .media-description {
+  padding: 0 10px 10px;
+  border-top: 1px solid #e7e7e7;
+  border-bottom: 1px solid #e7e7e7;
+}
+.media-detail .media-preview-container .selection-exist .media-description section {
+  padding: 10px;
+  margin: 0 -10px 10px;
+  background-color: #e7e7e7;
+  color: #000;
+}
+.media-detail .media-preview-container .selection-exist .media-description table {
+  color: #000;
+  margin-bottom: 0;
+}
+.media-detail .media-preview-container .selection-exist .media-description table td {
+  padding: 0 3px 0 0;
+}
+.media-detail .media-preview-container .selection-exist .media-action-btn {
+  padding: 5px;
+  width: 100%;
+}
+.media-detail .media-preview-container .selection-exist .media-full-preview {
+  vertical-align: middle;
+  text-align: center;
+  display: table-cell;
+  width: 300px;
+  float: none;
+  height: 225px;
+  border-bottom: 1px solid #d2d6de;
+  border-right: 1px solid #d2d6de;
+  background: #ecf0f5 url('../images/loader.gif') center no-repeat;
+}
+.media-detail .media-preview-container .selection-exist .media-full-preview img,
+.media-detail .media-preview-container .selection-exist .media-full-preview .mejs-container {
+  background-color: #ecf0f5;
+}
+.media-detail .media-preview-container .selection-exist .media-full-preview img {
+  max-width: 300px;
+  max-height: 225px;
+}
+.media-detail .media-preview-container .selection-exist .media-full-preview audio {
+  height: 225px;
+}
+.media-detail .media-preview-container .nothing-selected {
+  vertical-align: middle;
+  text-align: center;
+}
+/* Small Devices, Tablets */
+@media only screen and (max-width: 768px) {
+  .media-detail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    box-shadow: -2px 0px 20px 1px #d2d6de;
+    z-index: 100;
+    display: none;
+  }
+}
+
+/*# sourceMappingURL=detail.css.map */

@@ -11,9 +11,22 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
+    
     protected $listen = [
         'Inoplate\Media\Domain\Events\LibraryWasCreated' => [
-            'Inoplate\Media\Listeners\Library\ResizeImage',
+            'Inoplate\Media\Listeners\Library\MoveToPreferredStorage',
+        ],
+        'Inoplate\Media\Domain\Events\LibraryWasDeleted' => [
+            'Inoplate\Media\Listeners\Library\RemoveFileFromStorage',
+        ],
+        'Inoplate\Media\Domain\Events\LibraryWasSharedToAuthor' => [
+            'Inoplate\Media\Listeners\Library\NotifyAuthorMediaShared',
+        ],
+        'Inoplate\Media\Domain\Events\LibraryWasUnsharedFromAuthor' => [
+            'Inoplate\Media\Listeners\Library\NotifyAuthorMediaUnshared',
+        ],
+        'Inoplate\Media\Events\FileWasFailedToUpload' => [
+            'Inoplate\Media\Listeners\Library\DeleteFileWhenUploadFailed',
         ],
     ];
 }

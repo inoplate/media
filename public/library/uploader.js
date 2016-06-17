@@ -1,95 +1,142 @@
 (function() {
-  var uploader;
+  var LibraryUploader;
 
-  uploader = [];
-
-  $(document).on('drop dragover', function(e) {
-    e.preventDefault();
-  });
-
-  $(document).on('dragleave drop', function(e) {
-    return $('.uploader-dropzone').removeClass('hover');
-  });
-
-  $(document).on('dragover', function(e) {
-    var dropzone, found, node, timeout;
-    dropzone = $('.uploader-dropzone');
-    timeout = window.dropZoneTimeout;
-    if (!timeout) {
-      dropzone.addClass('in');
-    } else {
-      clearTimeout(timeout);
+  LibraryUploader = (function() {
+    function LibraryUploader($element, options) {
+      this.$element = $element;
+      this.__attachEvent();
+      this.__init();
     }
-    found = false;
-    node = e.target;
-    if ($(node).hasClass('uploader-dropzone')) {
-      if (!$(node).hasClass('hover')) {
-        $(node).addClass('hover');
+
+    LibraryUploader.prototype.__attachEvent = function() {
+      $(document).on('drop dragover', function(e) {
+        e.preventDefault();
+      });
+      $(document).on('dragleave drop', function(e) {
+        return $('.uploader-dropzone', this.$element).removeClass('hover');
+      });
+      return $(document).on('dragover', function(e) {
+        var dropzone, found, node, timeout;
+        dropzone = $('.uploader-dropzone', this.$element);
+        timeout = window.dropZoneTimeout;
+        if (!timeout) {
+          dropzone.addClass('in');
+        } else {
+          clearTimeout(timeout);
+        }
+        found = false;
+        node = e.target;
+        if ($(node).hasClass('uploader-dropzone')) {
+          if (!$(node).hasClass('hover')) {
+            $(node).addClass('hover');
+          }
+        } else if ($(node).parents('.uploader-dropzone').length > 0) {
+          if (!$(node).parents('.uploader-dropzone').hasClass('hover')) {
+            $(node).parents('.uploader-dropzone').addClass('hover');
+          }
+        } else {
+          dropzone.removeClass('hover');
+        }
+        window.dropZoneTimeout = setTimeout(function() {
+          window.dropZoneTimeout = null;
+        }, 100);
+      });
+    };
+
+    LibraryUploader.prototype.__init = function() {
+      var browseId, chunkSize, dropzoneId, fileContainerId, maxUploadSize, target, uploader;
+      target = '/admin/inoplate-media/libraries/upload';
+      chunkSize = this.$element.data('chunk');
+      maxUploadSize = this.$element.data('maxupload');
+      browseId = $(".btn-browse", this.$element);
+      dropzoneId = $(".uploader-dropzone", this.$element);
+      fileContainerId = $(".file-container", this.$element);
+
+      /*
+          The simulaneous upload set to 1
+          Its because Laravel framework on server side has mysterious session persistence problem
+       */
+      uploader = new Flow({
+        target: target,
+        forceChunkSize: true,
+        chunkSize: chunkSize,
+        simultaneousUploads: 1,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      uploader.assignBrowse(browseId[0]);
+      uploader.assignDrop(dropzoneId[0]);
+      uploader.on('fileAdded', (function(_this) {
+        return function(file) {
+          if (file.size > maxUploadSize) {
+            return false;
+          }
+          _this.$element.trigger('uploader.fileAdded', [file]);
+        };
+      })(this));
+      uploader.on('fileProgress', (function(_this) {
+        return function(file) {
+          _this.$element.trigger('uploader.fileProgress', [file]);
+        };
+      })(this));
+      uploader.on('filesSubmitted', (function(_this) {
+        return function(file, event) {
+          uploader.upload();
+          _this.$element.trigger('uploader.filesSubmitted', [file, event]);
+        };
+      })(this));
+      uploader.on('fileSuccess', (function(_this) {
+        return function(file, message) {
+          _this.$element.trigger('uploader.fileSuccess', [file, message]);
+        };
+      })(this));
+      uploader.on('fileRetry', (function(_this) {
+        return function(file, chunk) {
+          _this.$element.trigger('uploader.fileRetry', [file, chunk]);
+        };
+      })(this));
+      return uploader.on('fileError', (function(_this) {
+        return function(file, message, chunk) {
+          _this.$element.trigger('uploader.fileError', [file, message, chunk]);
+        };
+      })(this));
+    };
+
+    return LibraryUploader;
+
+  })();
+
+  $.fn.libraryUploader = function(option) {
+    var args, defaults;
+    args = arguments;
+    defaults = {};
+    this.each(function() {
+      var $this, argsToSent, data, k, options, v;
+      $this = $(this);
+      data = $this.data('library.uploader');
+      options = $.extend({}, defaults, $this.data(), typeof option === 'object' && option);
+      if (!data) {
+        $this.data('library.uploader', (data = new LibraryUploader($this, options)));
       }
-    } else if ($(node).parents('.uploader-dropzone').length > 0) {
-      if (!$(node).parents('.uploader-dropzone').hasClass('hover')) {
-        $(node).parents('.uploader-dropzone').addClass('hover');
+      if (typeof option === 'string') {
+        argsToSent = [];
+        for (k in args) {
+          v = args[k];
+          if (k > 0) {
+            argsToSent.push(v);
+          }
+        }
+        return data[option].apply(data, argsToSent);
       }
-    } else {
-      dropzone.removeClass('hover');
-    }
-    window.dropZoneTimeout = setTimeout(function() {
-      window.dropZoneTimeout = null;
-    }, 100);
+    });
+    return this;
+  };
+
+  $(function() {
+    return $('.uploader').libraryUploader();
   });
-
-  $('.uploader').each(function() {
-    var $that, browseId, chunkSize, dropzoneId, fileContainerId, index, maxUploadSize, target;
-    $that = $(this);
-    target = '/admin/inoplate-media/libraries/upload';
-    chunkSize = $(this).data('chunk');
-    maxUploadSize = $(this).data('maxupload');
-    index = uploader.length;
-    browseId = "btn-browse-" + index;
-    dropzoneId = "uploader-dropzone-" + index;
-    fileContainerId = "file-container-" + index;
-    $('.file-container', this).attr('id', fileContainerId);
-    $('.uploader-dropzone', this).attr('id', dropzoneId);
-    $('.btn-browse', this).attr('id', browseId);
-
-    /*
-        The simulaneous upload set to 1
-        Its because Laravel framework on server side has mysterious session persistence problem
-     */
-    uploader[index] = new Flow({
-      target: target,
-      forceChunkSize: true,
-      chunkSize: chunkSize,
-      simultaneousUploads: 1,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
-    uploader[index].assignBrowse(document.getElementById(browseId));
-    uploader[index].assignDrop(document.getElementById(dropzoneId));
-    uploader[index].on('fileAdded', function(file) {
-      if (file.size > maxUploadSize) {
-        return false;
-      }
-      $that.trigger('uploader.fileAdded', [file]);
-    });
-    uploader[index].on('fileProgress', function(file) {
-      $that.trigger('uploader.fileProgress', [file]);
-    });
-    uploader[index].on('filesSubmitted', function(file, event) {
-      uploader[index].upload();
-      $that.trigger('uploader.filesSubmitted', [file, event]);
-    });
-    uploader[index].on('fileSuccess', function(file, message) {
-      $that.trigger('uploader.fileSuccess', [file, message]);
-    });
-    return uploader[index].on('fileError', function(file, message, chunk) {
-      $that.trigger('uploader.fileError', [file, message, chunk]);
-    });
-  });
-
-  return;
 
 }).call(this);
 

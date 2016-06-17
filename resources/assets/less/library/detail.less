@@ -1,0 +1,96 @@
+@import "variables.less";
+
+.media-detail {
+    border-top: 1px solid @gray;
+    border-left: 1px solid @gray;
+    width: 300px;
+
+    .media-error {
+        padding: 10px;
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+    }
+
+    .media-preview-container, .nothing-selected {
+        width: 100%;
+        color: @gray;
+    }
+
+    .media-preview-container {
+        .selection-exist {
+            .media-description {
+                padding: 0 10px 10px;
+                border-top: 1px solid @lighter-gray;
+
+                section {
+                    padding: 10px;
+                    margin: 0 -10px 10px;
+                    background-color: @lighter-gray;
+                    color: #000
+                }
+
+                table {
+                    color: #000;
+                    margin-bottom: 0;
+
+                    td {
+                        padding: 0 3px 0 0;
+                    }
+                }
+
+                border-bottom: 1px solid @lighter-gray;
+            }
+
+            .media-action-btn {
+                padding: 5px;
+                width: 100%;
+            }
+
+            .media-full-preview {
+                vertical-align: middle;
+                text-align: center;
+                display: table-cell;
+                width: 300px;
+                float: none;
+                height: 225px;
+                border-bottom: 1px solid @gray;
+                border-right: 1px solid @gray;
+                background: @light-gray url('../images/loader.gif') center no-repeat;
+
+                img, .mejs-container {
+                    background-color: @light-gray;
+                }
+
+                img {
+                    max-width: 300px;
+                    max-height: 225px;
+                }
+
+                audio {
+                    height: 225px
+                }
+            }
+        }
+
+        .nothing-selected {
+            vertical-align: middle;
+            text-align: center;
+        }
+    }
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+    .media-detail {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        box-shadow: -2px 0px 20px 1px @gray;
+        z-index: 100;
+        display: none;
+    }
+}

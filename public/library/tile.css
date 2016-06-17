@@ -1,0 +1,108 @@
+.media-tile {
+  padding: 10px;
+  border-top: 1px solid #d2d6de;
+}
+.media-tile .end-info {
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+.media-tile .media-container .overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+}
+.media-tile .media-container ul.thumbnail-wrapper {
+  list-style: none;
+  padding-left: 0;
+  font-size: 0;
+}
+.media-tile .media-container ul.thumbnail-wrapper li {
+  width: 150px;
+  margin: 0 20px 20px 0;
+  display: inline-block;
+  font-size: 14px;
+}
+.media-tile .media-container ul.thumbnail-wrapper li .thumbnail {
+  position: relative;
+  border-radius: 0;
+  border: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+.media-tile .media-container ul.thumbnail-wrapper li .thumbnail .btn-action-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.media-tile .media-container ul.thumbnail-wrapper li .thumbnail .btn-action-wrapper .btn-action {
+  vertical-align: middle;
+  text-align: center;
+  height: 150px;
+  width: 150px;
+  display: none;
+}
+.media-tile .media-container ul.thumbnail-wrapper li .thumbnail .img-placeholder {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border: 1px solid #ecf0f5;
+  border-radius: 4px;
+  background: #ecf0f5 url('../images/loader.gif') center no-repeat;
+}
+.media-tile .media-container ul.thumbnail-wrapper li .thumbnail .img-placeholder img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  max-width: 99.99%;
+  border-radius: 4px;
+  background-color: #ecf0f5;
+}
+.media-tile .media-container ul.thumbnail-wrapper li .thumbnail .caption {
+  padding-left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-weight: bold;
+}
+.media-tile .media-container ul.thumbnail-wrapper li:not(.next-libraries-loader) .thumbnail:hover {
+  cursor: pointer;
+}
+.media-tile .media-container ul.thumbnail-wrapper li:not(.next-libraries-loader):not(.error) .thumbnail:hover {
+  cursor: pointer;
+}
+.media-tile .media-container ul.thumbnail-wrapper li:not(.next-libraries-loader):not(.error) .thumbnail:hover .img-placeholder {
+  border: 1px solid #5bc0de;
+}
+.media-tile .media-container ul.thumbnail-wrapper li:not(.next-libraries-loader):not(.error) .thumbnail:hover .caption {
+  color: #5bc0de;
+}
+.media-tile .media-container ul.thumbnail-wrapper li.error .thumbnail .img-placeholder,
+.media-tile .media-container ul.thumbnail-wrapper li.error.selected .thumbnail .img-placeholder {
+  border: 1px solid #dd4b39;
+}
+.media-tile .media-container ul.thumbnail-wrapper li.error .thumbnail .caption,
+.media-tile .media-container ul.thumbnail-wrapper li.error.selected .thumbnail .caption {
+  color: #dd4b39;
+}
+.media-tile .media-container ul.thumbnail-wrapper li.uploading .thumbnail:hover .btn-action-wrapper .btn-action,
+.media-tile .media-container ul.thumbnail-wrapper li.error .thumbnail:hover .btn-action-wrapper .btn-action {
+  display: table-cell;
+}
+.media-tile .media-container ul.thumbnail-wrapper li.selected .thumbnail .img-placeholder {
+  border: 1px solid #5bc0de;
+}
+.media-tile .media-container ul.thumbnail-wrapper li.selected .thumbnail .caption {
+  color: #5bc0de;
+}
+
+/*# sourceMappingURL=tile.css.map */
