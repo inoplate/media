@@ -17,9 +17,17 @@
     },
     "require": {
         "ramsey/uuid": "^3.1",
-        "inoplate/notifier" : "dev-master",
+        "inoplate/notifier" : "0.1.*",
         "intervention/image": "^2.3",
         "intervention/imagecache": "^2.3"
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
     },
     "config": {
         "preferred-install": "dist"
