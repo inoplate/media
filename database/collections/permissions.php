@@ -5,6 +5,7 @@ return [
         'name' => 'media.admin.libraries.create.get',
         'description' => 'inoplate-media::permissions.media_admin_library_create_get',
         'aliases' => [
+            'media.admin.libraries.upload.get',
             'media.admin.libraries.upload.post'
         ]
     ],

@@ -170,6 +170,7 @@ class LibraryTile
             globalPayloads = @payloads.apply this
 
         payloads = $.extend globalPayloads, payloads, true
+        payloads['_'] = Math.random()
         payloads = this.__stringifyPayload payloads
 
         payloads

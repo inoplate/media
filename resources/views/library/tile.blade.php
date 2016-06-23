@@ -3,7 +3,7 @@
         <div class="media-container">
             <ul class="thumbnail-wrapper">
                 <li class="next-libraries-loader" data-loading="false">
-                    <a class="thumbnail" href="admin/inoplate-media/libraries">
+                    <a class="thumbnail" href="admin/inoplate-media/libraries?">
                         <div class="img-placeholder">
                         </div>
                         <div class="caption">Loading next library...</div>

@@ -12,7 +12,7 @@
 }
 .media-detail .media-preview-container,
 .media-detail .nothing-selected {
-  width: 100%;
+  width: 300px;
   color: #d2d6de;
 }
 .media-detail .media-preview-container .selection-exist .media-description {
@@ -29,9 +29,21 @@
 .media-detail .media-preview-container .selection-exist .media-description table {
   color: #000;
   margin-bottom: 0;
+  width: 280px;
+  table-layout: fixed;
 }
-.media-detail .media-preview-container .selection-exist .media-description table td {
+.media-detail .media-preview-container .selection-exist .media-description table tbody tr td {
   padding: 0 3px 0 0;
+}
+.media-detail .media-preview-container .selection-exist .media-description table tbody tr td:nth-child(1) {
+  width: 100px;
+}
+.media-detail .media-preview-container .selection-exist .media-description table tbody tr td:nth-child(2) {
+  width: 10px;
+}
+.media-detail .media-preview-container .selection-exist .media-description table tbody tr td:nth-child(3) {
+  width: 170px;
+  word-wrap: break-word;
 }
 .media-detail .media-preview-container .selection-exist .media-action-btn {
   padding: 5px;

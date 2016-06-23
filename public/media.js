@@ -39,20 +39,13 @@
   };
 
   window.bytesToSize = function(bytes, precision) {
-    var posttxt, sizes;
-    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    posttxt = 0;
+    var i;
     if (bytes === 0) {
-      'n/a';
+      return 'n/a';
+    } else {
+      i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return (bytes / Math.pow(1024, i)).toFixed(precision) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
     }
-    if (bytes < 1024) {
-      (Number(bytes)) + " " + sizes[posttxt];
-    }
-    while (bytes >= 1024) {
-      posttxt++;
-      bytes = bytes / 1024;
-    }
-    return (bytes.toPrecision(precision)) + " " + sizes[posttxt];
   };
 
 }).call(this);

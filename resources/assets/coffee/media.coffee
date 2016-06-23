@@ -39,15 +39,8 @@ window.isAudio = (mime) ->
     return false
 
 window.bytesToSize = (bytes, precision) ->
-    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    posttxt = 0;
     if bytes == 0 
         'n/a'
-    if bytes < 1024
-        "#{Number(bytes)} #{sizes[posttxt]}"
-
-    while bytes >= 1024 
-            posttxt++;
-            bytes = bytes / 1024;
-
-    "#{bytes.toPrecision(precision)} #{sizes[posttxt]}"
+    else
+        i = Math.floor( Math.log(bytes) / Math.log(1024) );
+        ( bytes / Math.pow(1024, i) ).toFixed(precision) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];

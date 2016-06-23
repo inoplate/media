@@ -15,7 +15,7 @@
     }
 
     .media-preview-container, .nothing-selected {
-        width: 100%;
+        width: 300px;
         color: @gray;
     }
 
@@ -35,9 +35,28 @@
                 table {
                     color: #000;
                     margin-bottom: 0;
+                    width: 280px;
+                    table-layout: fixed;
 
-                    td {
-                        padding: 0 3px 0 0;
+                    tbody {
+                        tr {
+                            td {
+                                padding: 0 3px 0 0;
+                            }
+
+                            td:nth-child(1) {
+                                width: 100px;
+                            }
+
+                            td:nth-child(2) {
+                                width: 10px;
+                            }
+
+                            td:nth-child(3) {
+                                width: 170px;
+                                word-wrap:break-word;
+                            }
+                        }
                     }
                 }
 

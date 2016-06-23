@@ -85,7 +85,7 @@ class DownloadController extends Controller
         else
             $library = $library->toArray();
 
-        $this->authorizeDownload($library);
+        $this->authorizeDownload($request, $library);
         $this->validateEtag($request, $library);
 
         $headers = $this->prepareHeaders($library, $dimension);
@@ -110,7 +110,7 @@ class DownloadController extends Controller
         else
             $library = $library->toArray();
 
-        $this->authorizeDownload($library);
+        $this->authorizeDownload($request, $library);
         $this->validateEtag($request, $library);
         
         $headers = $this->prepareHeaders($library);
@@ -189,9 +189,9 @@ class DownloadController extends Controller
      * @param  array $library
      * @return void
      */
-    protected function authorizeDownload($library)
+    protected function authorizeDownload(Request $request, $library)
     {
-        $user = $this->auth->user();
+        $user = $request->user();
 
         if(is_null($user)) {
             if($library['description']['visibility'] == 'private') {
