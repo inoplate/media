@@ -63,6 +63,7 @@ class LibraryUploader
             forceChunkSize: true
             chunkSize: chunkSize
             simultaneousUploads: 1
+            allowDuplicateUploads: true
             headers:
                 'X-Requested-With' : 'XMLHttpRequest'
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

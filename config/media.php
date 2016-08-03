@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'notifier' => ['database'],
     'library' => [
         'per_page' => 8,
         'chunks_temp_path' => 'chunks', // Path to store chunks
@@ -10,7 +11,7 @@ return [
         ],
         'extensions' => [
             'jpg', 'jpeg', 'png', 'gif', 'ico', 'svg', // Image file extensions
-            'pdf', 'doc', 'docx', 'ppt', 'pptx', 'pps', 'ppsx', 'odt', 'xls', 'xlsx', 'psd', // Documents extensions
+            'pdf', 'doc', 'docx', 'ppt', 'pptx', 'pps', 'ppsx', 'odt', 'ods', 'xls', 'xlsx', 'psd', // Documents extensions
             'mp3', 'm4a', 'ogg', 'wav', 'mpga', // Audio extensions
             'mp4', 'm4v', 'mov', 'wmv', 'avi', 'mpg', 'ogv', '3gp', '3g2', // Video extensions
             'zip', 'gzip', 'tar.gz', 'rar' // Compressed files extension

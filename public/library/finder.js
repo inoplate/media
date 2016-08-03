@@ -40,7 +40,6 @@
           return getThumbnail(library.description.mime) || ("/uploads/" + library.description.path + "/thumb");
         }
       });
-      tile.libraryTile('checkPagination');
       return tile;
     };
 
@@ -75,7 +74,6 @@
       $('.uploader', this.$element).on('uploader.fileAdded', (function(_this) {
         return function(e, file) {
           var identifier;
-          console.log(_this.tile);
           identifier = file.uniqueIdentifier;
           _this.tile.libraryTile('addUploading', identifier, file.name);
           return $("[data-upload-id=\"" + identifier + "\"]", _this.tile).data('file', file);
@@ -215,6 +213,7 @@
           } else {
             _this.$element.trigger("media.finder.selected", [_this.id, _this.getSelected()[0]]);
           }
+          $(".btn-select", _this.$element).addClass('disabled');
           _this.selected = [];
           _this.$element.modal('hide');
           return _this.tile.libraryTile('clearSelection');
@@ -246,8 +245,11 @@
             argsToSent.push(v);
           }
         }
-        return data[option].apply(data, argsToSent);
+        data[option].apply(data, argsToSent);
       }
+      return $this.on('shown.bs.modal', function() {
+        return $('.media-container', this).libraryTile('checkPagination');
+      });
     });
     return this;
   };

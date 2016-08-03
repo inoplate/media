@@ -112,6 +112,7 @@ class LibraryTile
             @$element.trigger "media.library.tile.refined-search"
 
     checkPagination: () ->
+        console.log(@$nextLoader.is(':within-viewport'));
         if @$nextLoader.is(':within-viewport') && !@$nextLoader.data('loading')
             url = $ 'a', @$nextLoader
                     .prop 'href'

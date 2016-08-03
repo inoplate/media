@@ -226,7 +226,7 @@ class LibraryController extends Controller
             route('media.admin.libraries.index.get'), 
             [
                 'message' => trans('inoplate-media::messages.library.deleted'),
-                'library' => $this->generateReturnedData($library->toArray())
+                'library' => $library->toArray()
             ]
         );
     }

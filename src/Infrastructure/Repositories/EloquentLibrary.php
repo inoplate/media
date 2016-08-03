@@ -86,6 +86,16 @@ class EloquentLibrary implements Contract
      */
     public function findByPath($path)
     {
+        $sizes = config('inoplate.media.library.sizes');
+
+        $path = preg_replace('/^\/uploads\//', '', $path);
+        $path = preg_replace('/^\/download\//', '', $path);
+
+        foreach ($sizes as $size => $dimension) {
+            $pattern = '/\/thumb$/';
+            $path = preg_replace($pattern, '', $path);
+        }
+
         $library = $this->model->where('path', $path)->first();
 
         return $this->toDomainModel($library);

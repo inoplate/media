@@ -252,7 +252,6 @@
       detail.libraryDetail('showDetail', meta.id, meta.description.path, meta.description.mime, meta.description);
       $('.title', detail).text(meta.description.title);
       $('.description', detail).text(meta.description.description);
-      console.log(bytesToSize(meta.description.size, 2));
       $('.size', detail).text(bytesToSize(meta.description.size, 2));
       $("form[data-control=\"publish\"]", detail).prop('action', "/admin/inoplate-media/libraries/publish/" + meta.id);
       $("form[data-control=\"unpublish\"]", detail).prop('action', "/admin/inoplate-media/libraries/unpublish/" + meta.id);

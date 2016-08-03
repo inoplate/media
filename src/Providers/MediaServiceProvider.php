@@ -34,6 +34,8 @@ class MediaServiceProvider extends ServiceProvider
         $this->registerViewCreators();
 
         $this->app['navigation']->register(require __DIR__ .'/../Http/navigations.php');
+        $this->app['validator']->extend('inoplate_media_validate_mime', 
+            'Inoplate\Media\Validators\MimetypeValidatorFromPath@validate');
     }
 
     /**

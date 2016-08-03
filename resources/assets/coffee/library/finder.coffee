@@ -30,7 +30,6 @@ class LibraryFinder
                 thumbnail: (library) ->
                     getThumbnail(library.description.mime) || "/uploads/#{library.description.path}/thumb"
 
-        tile.libraryTile 'checkPagination'
         tile
 
     __attachEvent: () ->
@@ -69,7 +68,6 @@ class LibraryFinder
 
         $ '.uploader', @$element
             .on 'uploader.fileAdded', (e, file) =>
-                console.log(@tile)
                 identifier = file.uniqueIdentifier
                 @tile.libraryTile 'addUploading', identifier, file.name
 
@@ -206,6 +204,9 @@ class LibraryFinder
             else
                 @$element.trigger "media.finder.selected", [@id, @getSelected()[0]]
 
+            $ ".btn-select", @$element
+                .addClass 'disabled'
+
             @selected = []
             @$element.modal 'hide'
             @tile.libraryTile 'clearSelection'
@@ -232,6 +233,10 @@ $.fn.libraryFinder = (option) ->
                     argsToSent.push v
 
             data[option].apply(data, argsToSent)
+
+        $this.on 'shown.bs.modal', () ->
+            $ '.media-container', this
+                .libraryTile 'checkPagination'
 
     this
 

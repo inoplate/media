@@ -2,24 +2,25 @@
 
 namespace Inoplate\Media\Listeners\Library;
 
-use Inoplate\Notifier\Laravel\NotifierFactory;
+use Inoplate\Foundation\Jobs\NotifyUser;
+use Inoplate\Foundation\App\Services\Bus\Dispatcher as Bus
 use Inoplate\Media\Domain\Events\LibraryWasUnsharedFromAuthor;
 
 class NotifyAuthorMediaUnshared
 {
     /**
-     * @var Inoplate\Media\Domain\Events\LibraryWasUnsharedFromAuthor
+     * @var Inoplate\Foundation\App\Services\Bus\Dispatcher
      */
-    protected $notifierFactory;
+    protected $bus;
 
     /**
      * Create new NotifyAuthorMediaUnshared instance
-     * 
-     * @param NotifierFactory $notifierFactory
+     *
+     * @param Bus $bus
      */
-    public function __construct(NotifierFactory $notifierFactory)
+    public function __construct(Bus $bus)
     {
-        $this->notifierFactory = $notifierFactory;
+        $this->bus = $bus;
     }
 
     /**
@@ -41,7 +42,7 @@ class NotifyAuthorMediaUnshared
                 'library' => $library->description()->value()['title']]
             );
 
-        $this->notifierFactory->drive('database')
-             ->notify($message, $userId);
+        $notifyDriver = config('inoplate.media.notifier');
+        $this->bus->dispatch(new NotifyUser($userId, $message, $notifyDriver));
     }
 }

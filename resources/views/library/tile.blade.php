@@ -11,7 +11,7 @@
                 </li>
             </ul>
             <div class="row end-info hide">
-                <div class="col-md-12">                              
+                <div class="col-md-12">                          
                     <span class="end-info">{{ trans('inoplate-foundation::labels.pagination.no_more_items') }}</span>                                   
                 </div>
             </div>
