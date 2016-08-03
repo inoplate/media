@@ -128,7 +128,6 @@
 
     LibraryTile.prototype.checkPagination = function() {
       var url;
-      console.log(this.$nextLoader.is(':within-viewport'));
       if (this.$nextLoader.is(':within-viewport') && !this.$nextLoader.data('loading')) {
         url = $('a', this.$nextLoader).prop('href');
         return this.__loadMore(url);
