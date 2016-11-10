@@ -3,7 +3,7 @@
 namespace Inoplate\Media\Listeners\Library;
 
 use Inoplate\Foundation\Jobs\NotifyUser;
-use Inoplate\Foundation\App\Services\Bus\Dispatcher as Bus
+use Inoplate\Foundation\App\Services\Bus\Dispatcher as Bus;
 use Inoplate\Media\Domain\Events\LibraryWasUnsharedFromAuthor;
 
 class NotifyAuthorMediaUnshared
