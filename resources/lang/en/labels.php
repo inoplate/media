@@ -21,6 +21,7 @@ return [
         'size' => 'Size',
         'create' => 'Upload new media libraries',
         'title' => 'Media libraries',
+        'owner' => 'Owner',
         'sub_title' => 'Manage media libraries such as images, musics, videos, documents, etc',
         'form' => [
             'general' => 'General information',

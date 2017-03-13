@@ -30,7 +30,7 @@ class LibraryController extends Controller
     protected $authis;
 
     public function __construct(
-        LibraryRepository $libraryRepository, 
+        LibraryRepository $libraryRepository,
         FilesystemFactory $filesystemFactory,
         Authis $authis
     ) {
@@ -56,15 +56,15 @@ class LibraryController extends Controller
 
         $paginator = new LengthAwarePaginator($items, $total, $perPage, $page);
         $paginator->setPath('/admin/inoplate-media/libraries');
-        
+
         return $this->getResponse('inoplate-media::library.index', ['libraries' => $paginator->toArray()]);
     }
 
     public function upload(
-        Request $request, 
-        Bus $bus, 
-        Receiver $receiver, 
-        Events $events, 
+        Request $request,
+        Bus $bus,
+        Receiver $receiver,
+        Events $events,
         MessageBag $messageBag
     ) {
         try{
@@ -90,9 +90,9 @@ class LibraryController extends Controller
                 $uploaded = $this->libraryRepository->findByPath($destination);
 
                 return $this->formSuccess(
-                    route('media.admin.libraries.update.get', ['id' => $uploaded->id()->value()]), 
+                    route('media.admin.libraries.update.get', ['id' => $uploaded->id()->value()]),
                     [
-                        'message' => trans('inoplate-media::messages.library.created'), 
+                        'message' => trans('inoplate-media::messages.library.created'),
                         'library' => $this->generateReturnedData($uploaded->toArray())
                     ]
                 );
@@ -127,9 +127,9 @@ class LibraryController extends Controller
 
         $library = $this->libraryRepository->findById(new MediaDomainModels\LibraryId($id));
         return $this->formSuccess(
-            route('media.admin.libraries.update.get', ['id' => $id]), 
+            route('media.admin.libraries.update.get', ['id' => $id]),
             [
-                'message' => trans('inoplate-media::messages.library.updated'), 
+                'message' => trans('inoplate-media::messages.library.updated'),
                 'library' => $this->generateReturnedData($library->toArray())
             ]
         );
@@ -146,9 +146,9 @@ class LibraryController extends Controller
 
         $library = $this->libraryRepository->findById(new MediaDomainModels\LibraryId($id));
         return $this->formSuccess(
-            route('media.admin.libraries.update.get', ['id' => $id]), 
+            route('media.admin.libraries.update.get', ['id' => $id]),
             [
-                'message' => trans('inoplate-media::messages.library.published'), 
+                'message' => trans('inoplate-media::messages.library.published'),
                 'library' => $this->generateReturnedData($library->toArray())
             ]
         );
@@ -164,9 +164,9 @@ class LibraryController extends Controller
         $bus->dispatch(new Commands\DescribeLibrary($id, $description));
         $library = $this->libraryRepository->findById(new MediaDomainModels\LibraryId($id));
         return $this->formSuccess(
-            route('media.admin.libraries.update.get', ['id' => $id]), 
+            route('media.admin.libraries.update.get', ['id' => $id]),
             [
-                'message' => trans('inoplate-media::messages.library.unpublished'), 
+                'message' => trans('inoplate-media::messages.library.unpublished'),
                 'library' => $this->generateReturnedData($library->toArray())
             ]
         );
@@ -194,9 +194,9 @@ class LibraryController extends Controller
         $library = $this->libraryRepository->findById(new MediaDomainModels\LibraryId($id));
 
         return $this->formSuccess(
-            route('media.admin.libraries.update.get', ['id' => $id]), 
+            route('media.admin.libraries.update.get', ['id' => $id]),
             [
-                'message' => trans('inoplate-media::messages.library.shared', ['shared' => count($userIds), 'unshared' => $unshared]), 
+                'message' => trans('inoplate-media::messages.library.shared', ['shared' => count($userIds), 'unshared' => $unshared]),
                 'library' => $this->generateReturnedData($library->toArray())
             ]
         );
@@ -223,7 +223,7 @@ class LibraryController extends Controller
         $bus->dispatch(new Commands\DeleteLibrary($id));
 
         return $this->formSuccess(
-            route('media.admin.libraries.index.get'), 
+            route('media.admin.libraries.index.get'),
             [
                 'message' => trans('inoplate-media::messages.library.deleted'),
                 'library' => $library->toArray()
@@ -233,7 +233,7 @@ class LibraryController extends Controller
 
     /**
      * Generate returned data
-     * 
+     *
      * @param  array $library
      * @return array
      */
@@ -247,7 +247,8 @@ class LibraryController extends Controller
 
         $library['description']['mime'] = $filesystem->exists($library['description']['path']) ? $filesystem->mimeType($library['description']['path']) : 'NaN';
         $library['description']['size'] = $filesystem->exists($library['description']['path']) ? $filesystem->size($library['description']['path']) : 'NaN';
-        
+        $library['description']['owner'] = $library['owner']['name'];
+
         if(is_image($library['description']['mime'])) {
             $library['description']['thumbnail'] = $library['description']['path'].'/medium';
         }else {

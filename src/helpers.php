@@ -1,7 +1,7 @@
 <?php
 
 if (! function_exists('is_image')) {
-    
+
     /**
      * Determine if mime is image
      * @param  string   $mime
@@ -46,7 +46,7 @@ if( !function_exists('get_thumbnail')) {
 
     /**
      * Retrieve image thumbnail
-     * 
+     *
      * @param  string $mime
      * @return string
      */
@@ -117,6 +117,8 @@ if(! function_exists('size_to_bytes')) {
     {
         $size = trim($size);
         $last = strtolower($size[strlen($size)-1]);
+        $size = preg_replace("/[^0-9]/", "", $size);
+        
         switch($last) {
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
