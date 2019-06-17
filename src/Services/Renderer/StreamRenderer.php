@@ -144,7 +144,7 @@ class StreamRenderer implements Renderer
             Session::save();
         }
 
-        ob_end_clean();
+        if (ob_get_contents()) ob_end_clean();
         $response->send();
     }
 
